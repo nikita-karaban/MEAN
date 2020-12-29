@@ -25,6 +25,7 @@ require('./config/passport')(passport);
 //взаимодействие других вебсайтов
 app.use(cors());
 
+// получаем данные запросов
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 1000000 }));
 
@@ -44,6 +45,8 @@ app.listen(port, () => {
     console.log("The server was running on the port:" + port)
 });
 // отслеживаем страницу сайта
+// когда мы будем делать запрос на нашу главную страницу, мы будем порлучать посты из бд
+// и дальше мы будет отправлять эти посты в качестве ответа с нашего сервера в виде json объекта
 app.get('/', (req, res) => {
     Post.find().then( posts => res.json(posts))
 });
@@ -54,7 +57,7 @@ app.get('/post/:id', (req, res) => {
     Post.findById(id).then( post => res.json(post))
 });
 
-app.delete('/post/:id', (req, res) => {
+app.delete('/post/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
     let url = req.url.split( '/' )
     id = url[2]
     Post.deleteOne({ _id: id}).then( () => res.json({ success: true }))

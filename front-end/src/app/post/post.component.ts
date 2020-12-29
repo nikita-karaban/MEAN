@@ -25,6 +25,7 @@ export class PostComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       this.login = JSON.parse(localStorage.getItem("user")).login
     }
+    // внутри переменной мы обращаемся к ActivatedRoute и дальше к его params
     this.post$ = this.route.params
     .pipe(switchMap( (params : Params) => {
       return this.authService.getPostById(params['id'])
@@ -34,10 +35,10 @@ export class PostComponent implements OnInit {
   deletePost(id) {
     this.authService.deletePost(id).subscribe( data => {
       if (!data.success) {
-        this._flashMessagesService.show("Post not deleted!", 
+        this._flashMessagesService.show("Post not deleted!",
         { cssClass: 'alert-danger', timeout: 3000 });
       } else {
-        this._flashMessagesService.show("Post deleted!", 
+        this._flashMessagesService.show("Post deleted!",
           { cssClass: 'alert-success', timeout: 3000 });
           this.router.navigate(['/'])
       }

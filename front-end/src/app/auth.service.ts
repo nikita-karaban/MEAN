@@ -15,20 +15,25 @@ export class AuthService {
     private http : Http
   ) { }
 
+  // метод, который регистрирует нашего пользователя
   registerUser(user) {
+    // формируем заголовок, в котором тип контента, которым мы отправляем на сервер, является объект формата json
     let headers = new Headers()
     headers.append('Content-Type', 'application/json')
-    return this.http.post('http://localhost:3000/account/reg', user, 
+    // дклаем запрос на сервер
+    // мы делаем post запрос в котором передаем объект нашего пользователя
+    // получаем ответ, и этот ответ мы преобразуем в ответ формата json
+    return this.http.post('http://localhost:3000/account/reg', user,
     { headers: headers}).pipe(map(res => res.json()))
   }
-
+   // метод, который авторизирует  нашего пользователя
   authUser(user) {
     let headers = new Headers()
     headers.append('Content-Type', 'application/json')
-    return this.http.post('http://localhost:3000/account/auth', user, 
+    return this.http.post('http://localhost:3000/account/auth', user,
     { headers: headers}).pipe(map(res => res.json()))
   }
-
+  // данный метод хранит данные об пользователе
   storeUser(token, user) {
     localStorage.setItem('token', token)
     localStorage.setItem('user', JSON.stringify(user))
@@ -43,14 +48,16 @@ export class AuthService {
     localStorage.clear()
   }
 
+  // метод, который проверяет авторизован погльзователь или нет
   isAuthenticated() {
     return tokenNotExpired()
   }
 
   createPost(post) {
     let headers = new Headers()
+    headers.append('Authorization', localStorage.getItem('token'))
     headers.append('Content-Type', 'application/json')
-    return this.http.post('http://localhost:3000/account/dashboard', post, 
+    return this.http.post('http://localhost:3000/account/dashboard', post,
     { headers: headers}).pipe(map(res => res.json()))
   }
 
@@ -63,6 +70,8 @@ export class AuthService {
   }
 
   deletePost(id) {
-    return this.http.delete(`http://localhost:3000/post/${id}` ).pipe(map(res => res.json()))
+    let headers = new Headers()
+    headers.append('Authorization', localStorage.getItem('token'))
+    return this.http.delete(`http://localhost:3000/post/${id}`, { headers: headers} ).pipe(map(res => res.json()))
   }
 }

@@ -33,39 +33,41 @@ export class RegComponent implements OnInit {
       password: this.password,
     }
     if(!user.name) {
-      this._flashMessagesService.show('Enter your name', 
+      this._flashMessagesService.show('Enter your name',
       { cssClass: 'alert-danger', timeout: 3000 });
       return false
     }
     else if(!user.login) {
-      this._flashMessagesService.show('Enter your login', 
+      this._flashMessagesService.show('Enter your login',
       { cssClass: 'alert-danger', timeout: 3000 });
       return false
     }
     else if(!user.email) {
-      this._flashMessagesService.show('Enter your email', 
+      this._flashMessagesService.show('Enter your email',
       { cssClass: 'alert-danger', timeout: 3000 });
       return false
     }
     else if(!user.password) {
-      this._flashMessagesService.show('Enter your password', 
+      this._flashMessagesService.show('Enter your password',
       { cssClass: 'alert-danger', timeout: 3000 });
       return false
     }
-    
+
     this.authService.registerUser(user).subscribe( data => {
       if (!data.success) {
-        this._flashMessagesService.show(data.msg, 
+        this._flashMessagesService.show(data.msg,
         { cssClass: 'alert-danger', timeout: 3000 });
+        // перемещаем пользователя на страничку регистрации, чтобы он поаробовал зарегистрироваться повторно
         this.router.navigate(['/reg'])
       } else {
-        this._flashMessagesService.show(data.msg, 
+        this._flashMessagesService.show(data.msg,
           { cssClass: 'alert-success', timeout: 3000 });
+          // перемещаем пользователя на страничку авторозации
           this.router.navigate(['/auth'])
       }
     })
-    
-    
+
+
   }
 
 }

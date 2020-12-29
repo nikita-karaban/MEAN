@@ -19,9 +19,10 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // метод, который выходит из аккаунта
   logoutUser() {
     this.authService.logout()
-    this._flashMessagesService.show("You are logged out", 
+    this._flashMessagesService.show("You are logged out",
       { cssClass: 'alert-success', timeout: 3000 });
       this.router.navigate(['/auth'])
   }
